@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Love Letter</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(to bottom, #ff9a9e, #fecfef);
+      overflow: hidden;
+      position: relative;
+    }
+
+    #love-letter {
+      text-align: center;
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    #love-letter:hover {
+      transform: scale(1.05);
+    }
+
+    #love-letter h1 {
+      font-size: 2rem;
+      color: #ff5e5e;
+    }
+
+    #love-letter p {
+      font-size: 1.2rem;
+      color: #555;
+    }
+
+    .card {
+      display: none;
+      text-align: center;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+      padding: 2rem;
+      max-width: 400px;
+    }
+
+    .heart {
+      width: 100px;
+      height: 100px;
+      background-color: #ff5e5e;
+      position: relative;
+      margin: 0 auto 20px;
+      transform: rotate(-45deg);
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      width: 100px;
+      height: 100px;
+      background-color: #ff5e5e;
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    .heart::before {
+      top: -50px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: 50px;
+      top: 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #ff5e5e;
+      margin: 0 0 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: #555;
+      margin: 0 0 1.5rem;
+    }
+
+    .button {
+      display: inline-block;
+      background: #ff5e5e;
+      color: white;
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background: #ff3d3d;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .floating {
+      position: absolute;
+      animation: move 3s infinite ease-in-out;
+    }
+
+    @keyframes move {
+      0% {
+        transform: translate(0, 0);
+      }
+      25% {
+        transform: translate(100px, -50px);
+      }
+      50% {
+        transform: translate(-100px, 100px);
+      }
+      75% {
+        transform: translate(50px, -100px);
+      }
+      100% {
+        transform: translate(0, 0);
+      }
+    }
+
+    /* Full-screen heart with fireworks */
+    #final-screen {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      overflow: hidden;
+    }
+
+    #final-screen .big-heart {
+      width: 200px;
+      height: 200px;
+      background-color: red;
+      position: relative;
+      transform: rotate(-45deg);
+      animation: pulse 1s infinite;
+      margin: 20px auto;
+    }
+
+    #final-screen .big-heart::before,
+    #final-screen .big-heart::after {
+      content: '';
+      width: 200px;
+      height: 200px;
+      background-color: red;
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    #final-screen .big-heart::before {
+      top: -100px;
+      left: 0;
+    }
+
+    #final-screen .big-heart::after {
+      left: 100px;
+      top: 0;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1) rotate(-45deg);
+      }
+      50% {
+        transform: scale(1.2) rotate(-45deg);
+      }
+      100% {
+        transform: scale(1) rotate(-45deg);
+      }
+    }
+
+    .fireworks {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .firework {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: white;
+      border-radius: 50%;
+      animation: explode 1s ease-out forwards;
+    }
+
+    @keyframes explode {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(3);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="love-letter">
+    <h1>To: My Man ❤️</h1>
+    <p>Open me to read a special message!</p>
+  </div>
+
+  <div class="card" id="card">
+    <div class="heart"></div>
+    <h1>Dear Lama,</h1>
+    <p>Will you be my valentine?</p>
+    <button class="button" id="yes-btn">Akid beke shi </button>
+    <button class="button" id="no-btn" style="margin-left: 10px;">lae ana madroub</button>
+  </div>
+
+  <div id="final-screen">
+    <div class="big-heart"></div>
+    <div class="fireworks" id="fireworks"></div>
+  </div>
+
+  <script>
+    const loveLetter = document.getElementById('love-letter');
+    const card = document.getElementById('card');
+    const noButton = document.getElementById('no-btn');
+    const yesButton = document.getElementById('yes-btn');
+    const finalScreen = document.getElementById('final-screen');
+    const fireworks = document.getElementById('fireworks');
+
+    // Open the letter
+    loveLetter.addEventListener('click', () => {
+      loveLetter.style.display = 'none';
+      card.style.display = 'block';
+    });
+
+    // Make the "No" button float
+    noButton.addEventListener('click', () => {
+      noButton.classList.add('floating');
+      noButton.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+      noButton.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+    });
+
+    // Display the final screen with fireworks and a heart
+    yesButton.addEventListener('click', () => {
+      card.style.display = 'none';
+      finalScreen.style.display = 'flex';
+      launchFireworks();
+    });
+
+    // Launch fireworks
+    function launchFireworks() {
+      for (let i = 0; i < 20; i++) {
+        const firework = document.createElement('div');
+        firework.classList.add('firework');
+        firework.style.top = Math.random() * 100 + '%';
+        firework.style.left = Math.random() * 100 + '%';
+        fireworks.appendChild(firework);
+
+        // Remove firework after animation
+        setTimeout(() => firework.remove(), 1000);
+      }
+    }
+  </script>
+</body>
+</html>
